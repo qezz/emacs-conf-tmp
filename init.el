@@ -1,4 +1,11 @@
 ;; -*- mode: emacs-lisp -*-
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (defvar running-windows (eq system-type 'windows-nt))
 (defvar running-x (eq window-system 'x))
 (defvar running-mac (eq window-system 'ns))
@@ -12,13 +19,13 @@
 (load "cyrillic-without-yo.el")
 
 (when running-mac
-  (set-input-method 'russian-computer-without-yo)
+  (set-input-method 'russian-computer)
   (deactivate-input-method)
   (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH") ":/Library/TeX/texbin"))
   (setq exec-path (append '("/usr/local/bin") exec-path '("/Library/TeX/texbin"))))
 
 (when running-windows
-  (set-input-method 'russian-computer-without-yo)
+  (set-input-method 'russian-computer)
   (deactivate-input-method)
   (setenv "PATH" (concat (getenv "PATH") ";C:\\texlive\\2014\\bin\\win32;C:\\MinGW\\bin;C:\\MinGW\\msys\\1.0\\bin"))
   (setq exec-path (append exec-path '("C:/texlive/2014/bin/win32" "C:/MinGW/bin" "C:/MinGW/msys/1.0/bin")))
@@ -33,63 +40,85 @@
 (when running-mac
   (set-fontset-font t 'cyrillic (font-spec :name "Monaco")))
 
+
+;;matlab
+(autoload 'matlab-mode "matlab" "Matlab Editing Mode" t)
+(setq matlab-indent-function t)
+(setq matlab-shell-command "matlab")
+
 (require 'custom)
 (when (file-exists-p "~/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes"))
 
-(load-theme 'twilight t)
+(load-theme 'spacemacs-light t)
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
  '(blink-cursor-mode nil)
  '(c-basic-offset 2)
- '(c-cleanup-list (quote (scope-operator
-                          brace-else-brace
-                          brace-elseif-brace
-                          brace-catch-brace
-                          empty-defun-braces)))
- '(c-default-style (quote ((java-mode . "java")
-                           (awk-mode . "awk")
-                           (other . "bsd"))))
+ '(c-cleanup-list
+   (quote
+    (scope-operator brace-else-brace brace-elseif-brace brace-catch-brace empty-defun-braces)))
+ '(c-default-style
+   (quote
+    ((java-mode . "java")
+     (awk-mode . "awk")
+     (other . "bsd"))))
  '(c-echo-syntactic-information-p nil)
- '(c-hanging-braces-alist (quote ((block-close . c-snug-do-while)
-                                  (statement-cont)
-                                  (substatement-open after)
-                                  (brace-list-open)
-                                  (brace-entry-open)
-                                  (extern-lang-open after)
-                                  (namespace-open after)
-                                  (namespace-close)
-                                  (module-open after)
-                                  (composition-open after)
-                                  (inexpr-class-open after)
-                                  (inexpr-class-close before)
-                                  (arglist-cont-nonempty))))
- '(c-offsets-alist (quote ((arglist-intro . ++)
-                           (arglist-cont . 0)
-                           (arglist-cont-nonempty . ++)
-                           (inher-intro . ++)
-                           (member-init-cont . 0)
-                           (statement-cont . ++)
-                           (substatement-open . 0))))
- '(c-require-final-newline (quote ((c-mode . t)
-                                   (c++-mode . t)
-                                   (objc-mode . t)
-                                   (java-mode . t)
-                                   (erlang-mode . t)
-                                   (haskell-mode . t)
-                                   (html-mode . t))))
+ '(c-hanging-braces-alist
+   (quote
+    ((block-close . c-snug-do-while)
+     (statement-cont)
+     (substatement-open after)
+     (brace-list-open)
+     (brace-entry-open)
+     (extern-lang-open after)
+     (namespace-open after)
+     (namespace-close)
+     (module-open after)
+     (composition-open after)
+     (inexpr-class-open after)
+     (inexpr-class-close before)
+     (arglist-cont-nonempty))))
+ '(c-offsets-alist
+   (quote
+    ((arglist-intro . ++)
+     (arglist-cont . 0)
+     (arglist-cont-nonempty . ++)
+     (inher-intro . ++)
+     (member-init-cont . 0)
+     (statement-cont . ++)
+     (substatement-open . 0))))
+ '(c-require-final-newline
+   (quote
+    ((c-mode . t)
+     (c++-mode . t)
+     (objc-mode . t)
+     (java-mode . t)
+     (erlang-mode . t)
+     (haskell-mode . t)
+     (html-mode . t))))
  '(column-number-mode t)
  '(compilation-read-command nil)
- '(cua-auto-tabify-rectangles nil)
- '(font-lock-mode t t (font-lock))
- '(imenu-sort-function 'imenu--sort-by-name)
+;; '(cua-auto-tabify-rectangles nil)
+ '(custom-safe-themes ;; темы, которые выполняют лисп-код, и отмечены как "безопасные"
+   (quote
+    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088"
+     "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476"
+     "39ba912fe6f2540f7082bbd460c7c800bb2b4cc2350af913c0896c0bf12f4902" default)))
+ '(font-lock-mode t t (font-lock)) ;; TODO
+ '(imenu-sort-function (quote imenu--sort-by-name))
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
+ '(package-selected-packages
+   (quote
+    ("spacemacs-theme" spacemacs-theme hy-mode ess-view ess-smart-underscore ess-smart-equals ess-R-object-popup ess-R-data-view ess erlang cider racer smart-tabs-mode slime matlab-mode markdown-mode)))
  '(pulse-flag (quote never))
  '(require-final-newline t)
  '(scroll-bar-mode (quote right))
@@ -176,7 +205,7 @@
               '(".hi" ".pdf" ".o")))
 
 (when (file-exists-p "~/.emacs.d/modes")
-       (mapc #'load (directory-files "~/.emacs.d/modes" t "\\.el$")))
+  (mapc #'load (directory-files "~/.emacs.d/modes" t "\\.el$")))
 
 (when (locate-library "mmm-mode")
   (require 'mmm-mode)
@@ -278,6 +307,12 @@
              (delete-trailing-whitespace-mode 'clean)
              ))
 
+(add-hook 'rust-mode-hook
+          '(lambda ()
+             (setq show-trailing-whitespace t)
+             (delete-trailing-whitespace-mode 'clean)
+             ))
+
 (setq auto-mode-alist
       (append
        '(("\\.h$" . c++-mode))
@@ -292,6 +327,7 @@
        '(("\\.org$" . org-mode))
        '(("\\.yaws$" . html-mode))
        '(("\\.php3?$" . html-mode))
+       '(("\\.m$" . matlab-mode))
        auto-mode-alist))
 
 (when (locate-library "template")
@@ -358,22 +394,22 @@
 
 (add-hook 'gdb-mode-hook
           '(lambda ()
-            (global-set-key (kbd "<f10>") 'gud-next)
-            (global-set-key (kbd "<f11>") 'gud-step)
-            (global-set-key (kbd "<f5>") 'gud-cont)
-            (global-set-key (kbd "C-<f5>") '(lambda ()
-                                             (interactive)
-                                             (switch-to-buffer gud-comint-buffer)
-                                             (let ((args (if current-prefix-arg
-                                                             (read-shell-command "Run with args: " gud-run-args
-                                                                                 (if (equal (car gud-run-args-history) gud-run-args)
-                                                                                     '(gud-run-args-history . 1)
+             (global-set-key (kbd "<f10>") 'gud-next)
+             (global-set-key (kbd "<f11>") 'gud-step)
+             (global-set-key (kbd "<f5>") 'gud-cont)
+             (global-set-key (kbd "C-<f5>") '(lambda ()
+                                               (interactive)
+                                               (switch-to-buffer gud-comint-buffer)
+                                               (let ((args (if current-prefix-arg
+                                                               (read-shell-command "Run with args: " gud-run-args
+                                                                                   (if (equal (car gud-run-args-history) gud-run-args)
+                                                                                       '(gud-run-args-history . 1)
                                                                                      'gud-run-args-history))
                                                              gud-run-args)))
-                                               (unless (equal args gud-run-args)
-                                                 (setq gud-run-args args))
-                                               (gud-call (concat "run " args)))))
-            (global-set-key (kbd "S-<f5>") 'gud-finish)))
+                                                 (unless (equal args gud-run-args)
+                                                   (setq gud-run-args args))
+                                                 (gud-call (concat "run " args)))))
+             (global-set-key (kbd "S-<f5>") 'gud-finish)))
 
 
 (when (locate-library "w3m")
@@ -387,8 +423,8 @@
     (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
     (setq slime-default-lisp 'sbcl))
   (when running-mac
-    (add-to-list 'slime-lisp-implementations '(ccl ("ccl64" "-K" "utf8")))
-    (setq slime-default-lisp 'ccl))
+    (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl"))) ;'(ccl ("ccl64" "-K" "utf8")))
+    (setq slime-default-lisp 'sbcl)) ;'ccl))
   (slime-setup '(slime-fancy slime-asdf))
   (when (locate-library "closure-template-html-mode")
     (add-to-list 'auto-mode-alist
@@ -430,3 +466,122 @@
   (setq uniquify-after-kill-buffer-p t)
   (setq uniquify-ignore-buffers-re "^\\*")
   (setq post-forward-angle-brackets 'post-forward-angle-brackets))
+
+(when running-mac
+  ;;% CLI matlab from the shell:
+  ;;% /Applications/MATLAB_R2016a.app/bin/matlab -nodesktop
+  ;;%
+  ;;% elisp setup for matlab-mode:
+  (setq matlab-shell-command "/Applications/MATLAB_R2016a.app/bin/matlab")
+  (setq matlab-shell-command-switches (list "-nodesktop")))
+
+
+(global-set-key (kbd "C-?") 'help-command)
+(global-set-key (kbd "M-?") 'mark-paragraph)
+(global-set-key (kbd "C-h") 'delete-backward-char)
+(global-set-key (kbd "M-h") 'backward-kill-word)
+
+;; scroll one line at a time (less "jumpy" than defaults)
+(setq mouse-wheel-scroll-amount '(5 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+;; (setq scroll-step 1) ;; keyboard scroll one line at a time'))
+
+
+(require 'package) ;; You might already have this line
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+(package-initialize) ;; You might already have this line
+
+
+
+;; use python3
+;;(setf python-shell-interpreter "python")
+(require 'python)
+
+(when running-mac
+  (defun python-shell-parse-command ()
+    "Return the string used to execute the inferior Python process."
+    "/usr/local/bin/python3 -i")
+  (setq python-shell-interpreter "python3")
+  (setq python-shell-prompt-detect-failure-warning nil)
+  )
+
+;; Fix for "native completion" warning when using python3
+(defun python-shell-completion-native-try ()
+  "Return non-nil if can trigger native completion"
+  (with-eval-after-load 'python
+    '(let ((python-shell-completion-native-enable t)
+           (python-shell-completion-native-output-timeout
+            python-shell-completion-native-try-output-timeout))
+       (python-shell-completion-native-get-completions
+        (get-buffer-process (current-buffer))
+        nil "_")))
+  )
+
+;; HACK
+;; Make Python think Emacs uses UTF8 (it is really)
+(setenv "LC_CTYPE" "UTF-8")
+(setenv "LC_ALL" "en_US.UTF-8")
+(setenv "LANG" "en_US.UTF-8")
+
+
+;; Make remote editing greate again
+(setq tramp-default-method "ssh")
+;; Usage: [C-x C-f] /method:user@remotehost:filename
+
+
+(savehist-mode 1)
+(setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+(setq savehist-file "~/.emacs.d/tmp/savehist")
+
+;; R config
+(when (and
+       (locate-library "ess")
+       (locate-library "ess-view")
+       (locate-library "ess-s-l"))
+  (require 'ess)
+  ;; (require 'ess-R-data-view)
+  ;; (require 'ess-R-object-popup)
+  ;; (require 'ess-smart-underscore)
+  ;; (require 'ess-smart-equals)
+  (require 'ess-view)
+  (require 'ess-s-l)
+  (ess--unset-smart-S-assign-key)       ; explicitly unset smart assign key
+  )
+
+
+(defun switch-theme (theme)
+  "Disable currently enables themes and load provided one"
+  (interactive
+   (list
+    (intern (completing-read "Switch to custom theme: "
+			     (mapcar 'symbol-name
+				     (custom-available-themes))))
+    ;;nil nil))
+    ))
+  (mapcar 'disable-theme custom-enabled-themes)
+  (load-theme theme)
+  (message "Theme %s" theme))
+
+
+;;(setq package-list '())
+(defvar new-packages-list nil)
+
+(if (package-installed-p 'spacemacs-theme)
+    (switch-theme 'spacemacs-light)
+  (add-to-list 'new-packages-list 'spacemacs-theme))
+
+;; update elpa cache
+(unless package-archive-contents
+  (package-refresh-contents))
+
+;; install new packages
+(dolist (package new-packages-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+
+
