@@ -22,6 +22,7 @@
   (set-input-method 'russian-computer)
   (deactivate-input-method)
   (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH") ":/Library/TeX/texbin"))
+  (setenv "RUST_SRC_PATH" "/Users/sergey-mishin/.rustup/toolchains/nightly-x86_64-apple-darwin/lib/rustlib/src/rust/src")
   (setq exec-path (append '("/usr/local/bin") exec-path '("/Library/TeX/texbin"))))
 
 (when running-windows
@@ -57,10 +58,60 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(TeX-command-list
+   (quote
+    (("xelatex shell-escaped" "xelatex --shell-escape -8bit %t" TeX-run-TeX nil t)
+     ("xelatex shell-escaped-no-tabs" "xelatex --shell-escape %t" TeX-run-TeX nil t)
+     ("TeX" "%(PDF)%(tex) %(file-line-error) %(extraopts) %`%S%(PDFout)%(mode)%' %t" TeX-run-TeX nil
+      (plain-tex-mode texinfo-mode ams-tex-mode)
+      :help "Run plain TeX")
+     ("LaTeX" "%`%l%(mode)%' %t" TeX-run-TeX nil
+      (latex-mode doctex-mode)
+      :help "Run LaTeX")
+     ("Makeinfo" "makeinfo %(extraopts) %t" TeX-run-compile nil
+      (texinfo-mode)
+      :help "Run Makeinfo with Info output")
+     ("Makeinfo HTML" "makeinfo %(extraopts) --html %t" TeX-run-compile nil
+      (texinfo-mode)
+      :help "Run Makeinfo with HTML output")
+     ("AmSTeX" "amstex %(PDFout) %(extraopts) %`%S%(mode)%' %t" TeX-run-TeX nil
+      (ams-tex-mode)
+      :help "Run AMSTeX")
+     ("ConTeXt" "%(cntxcom) --once --texutil %(extraopts) %(execopts)%t" TeX-run-TeX nil
+      (context-mode)
+      :help "Run ConTeXt once")
+     ("ConTeXt Full" "%(cntxcom) %(extraopts) %(execopts)%t" TeX-run-TeX nil
+      (context-mode)
+      :help "Run ConTeXt until completion")
+     ("BibTeX" "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
+     ("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber")
+     ("View" "%V" TeX-run-discard-or-function t t :help "Run Viewer")
+     ("Print" "%p" TeX-run-command t t :help "Print the file")
+     ("Queue" "%q" TeX-run-background nil t :help "View the printer queue" :visible TeX-queue-command)
+     ("File" "%(o?)dvips %d -o %f " TeX-run-dvips t t :help "Generate PostScript file")
+     ("Dvips" "%(o?)dvips %d -o %f " TeX-run-dvips nil t :help "Convert DVI file to PostScript")
+     ("Dvipdfmx" "dvipdfmx %d" TeX-run-dvipdfmx nil t :help "Convert DVI file to PDF with dvipdfmx")
+     ("Ps2pdf" "ps2pdf %f" TeX-run-ps2pdf nil t :help "Convert PostScript file to PDF")
+     ("Glossaries" "makeglossaries %s" TeX-run-command nil t :help "Run makeglossaries to create glossary file")
+     ("Index" "makeindex %s" TeX-run-index nil t :help "Run makeindex to create index file")
+     ("upMendex" "upmendex %s" TeX-run-index t t :help "Run mendex to create index file")
+     ("Xindy" "texindy %s" TeX-run-command nil t :help "Run xindy to create index file")
+     ("Check" "lacheck %s" TeX-run-compile nil
+      (latex-mode)
+      :help "Check LaTeX file for correctness")
+     ("ChkTeX" "chktex -v6 %s" TeX-run-compile nil
+      (latex-mode)
+      :help "Check LaTeX file for common mistakes")
+     ("Spell" "(TeX-ispell-document \"\")" TeX-run-function nil t :help "Spell-check the document")
+     ("Clean" "TeX-clean" TeX-run-function nil t :help "Delete generated intermediate files")
+     ("Clean All" "(TeX-clean t)" TeX-run-function nil t :help "Delete generated intermediate and output files")
+     ("Other" "" TeX-run-command t t :help "Run an arbitrary command"))))
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
    ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
  '(blink-cursor-mode nil)
- '(c-basic-offset 2)
+ '(c-basic-offset 4)
  '(c-cleanup-list
    (quote
     (scope-operator brace-else-brace brace-elseif-brace brace-catch-brace empty-defun-braces)))
@@ -105,21 +156,20 @@
      (html-mode . t))))
  '(column-number-mode t)
  '(compilation-read-command nil)
-;; '(cua-auto-tabify-rectangles nil)
- '(custom-safe-themes ;; темы, которые выполняют лисп-код, и отмечены как "безопасные"
+ '(custom-safe-themes
    (quote
-    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088"
-     "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476"
-     "39ba912fe6f2540f7082bbd460c7c800bb2b4cc2350af913c0896c0bf12f4902" default)))
- '(font-lock-mode t t (font-lock)) ;; TODO
+    ("3eb93cd9a0da0f3e86b5d932ac0e3b5f0f50de7a0b805d4eb1f67782e9eb67a4" "8bb8a5b27776c39b3c7bf9da1e711ac794e4dc9d43e32a075d8aa72d6b5b3f59" "32ffeb13f3c152300d14757b431967e63da005f54712dad6a2f8b8b33fb94bac" "6de7c03d614033c0403657409313d5f01202361e35490a3404e33e46663c2596" "938d8c186c4cb9ec4a8d8bc159285e0d0f07bad46edf20aa469a89d0d2a586ea" "ed317c0a3387be628a48c4bbdb316b4fa645a414838149069210b66dd521733f" "2b8dff32b9018d88e24044eb60d8f3829bd6bbeab754e70799b78593af1c3aba" "b181ea0cc32303da7f9227361bb051bbb6c3105bb4f386ca22a06db319b08882" "6f441c0e5d8199f08eb4b73e9c697710282bcae95e5925b7649ddfa8cea2e24c" "28ec8ccf6190f6a73812df9bc91df54ce1d6132f18b4c8fcc85d45298569eb53" "f9574c9ede3f64d57b3aa9b9cef621d54e2e503f4d75d8613cbcc4ca1c962c21" "ff7625ad8aa2615eae96d6b4469fcc7d3d20b2e1ebc63b761a349bebbb9d23cb" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "39ba912fe6f2540f7082bbd460c7c800bb2b4cc2350af913c0896c0bf12f4902" default)))
+ '(fci-rule-color "#14151E")
+ '(font-lock-mode t t (font-lock))
  '(imenu-sort-function (quote imenu--sort-by-name))
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
  '(package-selected-packages
    (quote
-    ("spacemacs-theme" spacemacs-theme hy-mode ess-view ess-smart-underscore ess-smart-equals ess-R-object-popup ess-R-data-view ess erlang cider racer smart-tabs-mode slime matlab-mode markdown-mode)))
+    (groovy-mode yaml-mode dockerfile-mode puppet-mode glsl-mode company-racer sourcerer-theme eink-theme ample-theme airline-themes ahungry-theme afternoon-theme abyss-theme dracula-theme racket-mode rudel gh-md flymd auctex-lua auctex-latexmk auctex hindent ghci-completion ghc-imported-from ghc dante "spacemacs-theme" spacemacs-theme hy-mode ess-view ess-smart-underscore ess-smart-equals ess-R-object-popup ess-R-data-view ess erlang cider racer smart-tabs-mode slime matlab-mode markdown-mode)))
  '(pulse-flag (quote never))
+ '(red "#ffffff")
  '(require-final-newline t)
  '(scroll-bar-mode (quote right))
  '(scroll-conservatively 1000000)
@@ -131,6 +181,28 @@
  '(transient-mark-mode t)
  '(truncate-lines t)
  '(truncate-partial-width-windows nil)
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#d54e53")
+     (40 . "goldenrod")
+     (60 . "#e7c547")
+     (80 . "DarkOliveGreen3")
+     (100 . "#70c0b1")
+     (120 . "DeepSkyBlue1")
+     (140 . "#c397d8")
+     (160 . "#d54e53")
+     (180 . "goldenrod")
+     (200 . "#e7c547")
+     (220 . "DarkOliveGreen3")
+     (240 . "#70c0b1")
+     (260 . "DeepSkyBlue1")
+     (280 . "#c397d8")
+     (300 . "#d54e53")
+     (320 . "goldenrod")
+     (340 . "#e7c547")
+     (360 . "DarkOliveGreen3"))))
+ '(vc-annotate-very-old-color nil)
  '(visible-bell t)
  '(which-function-mode t))
 
@@ -274,6 +346,12 @@
              (delete-trailing-whitespace-mode 'clean)
              ))
 
+(add-hook 'clojure-mode-hook
+          '(lambda ()
+             (setq show-trailing-whitespace t)
+             (delete-trailing-whitespace-mode 'clean)
+             ))
+
 (add-hook 'makefile-mode-hook
           '(lambda ()
              (local-set-key (kbd "<f7>") 'compile)
@@ -311,7 +389,19 @@
           '(lambda ()
              (setq show-trailing-whitespace t)
              (delete-trailing-whitespace-mode 'clean)
+             (racer-mode)
              ))
+
+;; (add-hook 'racer-mode-hook
+;;           #'eldoc-mode)
+
+(add-hook 'racer-mode-hook
+          '(lambda ()
+             (company-mode)))
+
+(require 'rust-mode)
+(define-key rust-mode-map (kbd "TAB") '(lambda () (interactive) (company-indent-or-complete-common)))
+(setq company-tooltip-align-annotations t)
 
 (setq auto-mode-alist
       (append
@@ -421,10 +511,13 @@
   (require 'slime)
   (when running-windows
     (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
+    (add-to-list 'slime-lisp-implementations '(ketos ("~/sources/ketos/target/release/ketos")))
     (setq slime-default-lisp 'sbcl))
   (when running-mac
+    (add-to-list 'slime-lisp-implementations '(ccl ("ccl64" "-K" "utf8")))
     (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl"))) ;'(ccl ("ccl64" "-K" "utf8")))
-    (setq slime-default-lisp 'sbcl)) ;'ccl))
+    (add-to-list 'slime-lisp-implementations '(ketos ("~/sources/ketos/target/release/ketos")))
+    (setq slime-default-lisp 'ccl))
   (slime-setup '(slime-fancy slime-asdf))
   (when (locate-library "closure-template-html-mode")
     (add-to-list 'auto-mode-alist
@@ -567,6 +660,12 @@
   (load-theme theme)
   (message "Theme %s" theme))
 
+(defun useless-fn (arg)
+  "Prints arg to minibuffer"
+  (interactive "MWrite something: ")
+  (message "Input: %s" arg))
+
+
 
 ;;(setq package-list '())
 (defvar new-packages-list nil)
@@ -585,3 +684,10 @@
     (package-install package)))
 
 
+(put 'downcase-region 'disabled nil)
+
+
+
+;; Auctex
+(setq LaTeX-verbatim-environments
+      '("verbatim" "verbatim*" "lstlisting" "minted" "rframe" "cxxframe" "bashframe" "codeframe"))
